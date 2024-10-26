@@ -27,55 +27,52 @@ const int NUM_DAYS = 7;  // times columns for 7 days
 
 const string filename = "marathon_data.txt";  //File containing the marathon data
 
-struct Runner
+struct MarRunner
 {
-    string Runners; //runner name
+    string name; //runner name
     int MilesRun[NUM_DAYS]; // Array for miles run each day
-    int Totalmiles; // total miles ran calculated
-    float Averagemiles; // average miles run calculated
+    int TotalMiles; // total miles ran calculated
+    float AverageMiles; // average miles run calculated
 
 };
 
 //Precondition -  expects file to be available,  reads data input file 
 //Postconditon- returing number of data on file and places it into memory
 //only allows a specified amount of rows to be read from file
-int getData(string Runers[], int MileRun[][NUM_DAYS], int MAX_Runners);
+int getData(MarRunner runners[], int MAX_Runners);
 
 //Precondition -  receives Miles two dimensiional array, and amout of runners/records,make const don't want to change
 //Postconditon- cal total, returing and give location for avg miles for ea,actual number of records
-void AvgMiles(const int MiRun[][NUM_DAYS], int TotMile[], double AvgMile [], int numRecord);
+void AvgMiles(MarRunner runners[], int numRecord);
 
 //Precondition -  receives names of runners, two dimensiional array, output of total and avg miles, and amout of records
 //Postconditon- output results displaying the runner, miles run, total and avg miles in proper format for each runner.
-void outputResults(string Runer[], const int MiRn[][NUM_DAYS], int TMile[], double Amile[], int numRec);
+void outputResults(const MarRunner runners[], int numRec);
 
 
 int main()
 {
 
-    string Runners[MAX_Runners];
-    int MilesRun[MAX_Runners][NUM_DAYS];
-    int Totalmiles[MAX_Runners];
-    double Averagemiles[MAX_Runners];
+    MarRunner runners[MAX_Runners]; // Array of structs
 
     int numRecords;//keep track of the number of records read
 
 
-    numRecords = getData(Runners,MilesRun, MAX_Runners);
+    numRecords = getData(runners, MAX_Runners);
 
-    cout << " " << endl; 
+   // cout << " " << endl; 
     cout << "numRecords = " << numRecords << endl;
 
     for (int i = 0; i < numRecords; i++)
     {
-        cout << Runners[i] << " ";
+        cout << runners[i].name << " ";
         for (int j = 0; j < NUM_DAYS; j++)
-            cout << MilesRun[i][j] << " ";
+            cout << runners[i].MilesRun[j] << " ";
 
         cout << endl;
     }
-    AvgMiles(MilesRun,Totalmiles, Averagemiles, numRecords);
-    outputResults(Runners, MilesRun, Totalmiles, Averagemiles, numRecords);
+    AvgMiles(runners, numRecords); 
+    outputResults(runners, numRecords);
 
 
     return 0;
@@ -83,10 +80,10 @@ int main()
 
 
 
-int getData(string Runers[], int MileRun[][NUM_DAYS], int MAX_Runners)
+int getData(MarRunner runners[], int MAX_Runners)
 {
     ifstream inFile;
-    int row = 0;
+    
     inFile.open(filename);
     if (!inFile.is_open())
     {
@@ -94,49 +91,52 @@ int getData(string Runers[], int MileRun[][NUM_DAYS], int MAX_Runners)
         return -1;
     }
 
-    inFile >> Runers[row];
+    int row = 0;
 
-    while (!inFile.eof() && !(row >= MAX_Runners))
+    while (inFile >> runners[row].name && row < MAX_Runners)
     {
-        cout << row << " " << Runers[row] << " " << endl;
+        cout << row << " " << runners[row].name << " " << endl;
 
         for (int i = 0; i < NUM_DAYS; i++)
         {
-            inFile >> MileRun[row][i];
-            cout << MileRun[row][i] << " ";
+           if (!(inFile >> runners[row].MilesRun[i])) // Check for successful read
+           {        
+               cout << "\nError reading data for " << runners[row].name << endl;
+               return row;                                     // Return number of successfully read rows
+           }
+            cout << runners[row].MilesRun[i] << " "; 
+            
         }
         cout << endl;
         row++;
+
         cout << "row = " << row << " " << endl;
-        inFile >> Runers[row];//which means row +1 because starts at 0
 
     }
     inFile.close();
     return row;
 }
 
-void AvgMiles(const int MiRun[][NUM_DAYS], int TotMile[], double AvgMile[], int numRecord) // int total[], double avg[])
+void AvgMiles(MarRunner runners[], int numRecord) // int total[], double avg[])
 {
-
-    double sum;
 
 
     for (int i = 0; i < numRecord; i++)
     {
-        sum = 0;
+        runners[i].TotalMiles = 0;
+
         for (int j = 0; j < NUM_DAYS; j++)
         {
-            sum += MiRun[i][j];
+            runners[i].TotalMiles += runners[i].MilesRun[j];
         }
-        TotMile[i] = sum; //( int total = sum; average = sum/7)
 
-        AvgMile[i] = sum / (NUM_DAYS);
+        runners[i].AverageMiles = static_cast<float>(runners[i].TotalMiles) / NUM_DAYS; //( int total = sum; average = sum/7)
 
 
     }
 }
 
-void outputResults(string Runer[], const int MiRn[][NUM_DAYS], int TMile[], double Amile[], int numRec) // const int total[], const double average[]) 
+void outputResults(const MarRunner runners[], int numRec) // const int total, const double average) 
 {
     cout << endl;
     cout << endl;
@@ -144,14 +144,14 @@ void outputResults(string Runer[], const int MiRn[][NUM_DAYS], int TMile[], doub
 
     for (int i = 0; i < numRec; i++)
     {
-        cout << setw(3) << i << " " << setw(10) << Runer[i];
+        cout << setw(3) << i << " " << setw(10) << runners[i].name;
         
         for (int j = 0; j < NUM_DAYS; j++)
         {
-            cout << setw(6) << MiRn[i][j];
+            cout << setw(6) << runners[i].MilesRun[j];
         }
 
-        cout << setw(8) << TMile[i];
-        cout << setw(8) << fixed << setprecision(2) << Amile[i] << endl;
+        cout << setw(8) << runners[i].TotalMiles;
+        cout << setw(8) << fixed << setprecision(2) << runners[i].AverageMiles << endl;
     }
 }

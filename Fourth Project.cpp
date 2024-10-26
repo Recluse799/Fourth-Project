@@ -27,6 +27,15 @@ const int NUM_DAYS = 7;  // times columns for 7 days
 
 const string filename = "marathon_data.txt";  //File containing the marathon data
 
+struct Runner
+{
+    string Runners; //runner name
+    int MilesRun[NUM_DAYS]; // Array for miles run each day
+    int Totalmiles; // total miles ran calculated
+    float Averagemiles; // average miles run calculated
+
+};
+
 //Precondition -  expects file to be available,  reads data input file 
 //Postconditon- returing number of data on file and places it into memory
 //only allows a specified amount of rows to be read from file

@@ -129,7 +129,8 @@ void AvgMiles(const int MiRun[][NUM_DAYS], int TotMile[], double AvgMile[], int 
 
 void outputResults(string Runer[], const int MiRn[][NUM_DAYS], int TMile[], double Amile[], int numRec) // const int total[], const double average[]) 
 {
-    
+    cout << endl;
+    cout << endl;
     cout << setw(10) << "Name" << setw(6) << "Mon" << setw(6) << "Tue" << setw(6) << "Wed" << setw(6) << "Thu" << setw(6) << "Fri" << setw(6) << "Sat" << setw(6) << "Sun" << setw(8) << "Total" << setw(8) << "Avg" << endl;
 
     for (int i = 0; i < numRec; i++)

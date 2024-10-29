@@ -71,8 +71,8 @@ int main()
 
         cout << endl;
     }
-    AvgMiles(runners, numRecords); 
-    outputResults(runners, numRecords);
+    AvgMiles(runners, numRecords, AvgMilesperday[numRecord]);
+    outputResults(runners, numRecords, AvgMilesperday[numRecord]);
 
 
     return 0;
@@ -134,6 +134,18 @@ void AvgMiles(MarRunner runners[], int numRecord) // int total[], double avg[])
 
 
     }
+
+    for (int j = 0; j < NUM_DAYS; j++)
+    {
+        int TotMilesperday = 0;
+
+        for (int i = 0; i < numRecord; i++)
+        {
+            TotMilesperday += runners[i].MilesRun[j];
+        }
+
+        static_cast<float> AvgMilesperday[numRecord] =  (TotMilesperday / numRecord); //( int total = sum; average = sum/7)
+
 }
 
 void outputResults(const MarRunner runners[], int numRec) // const int total, const double average) 

@@ -34,11 +34,11 @@ int getData(string Runers[], int MileRun[][NUM_DAYS], int MAX_Runners);
 
 //Precondition -  receives Miles two dimensiional array, and amout of runners/records,make const don't want to change
 //Postconditon- cal total, returing and give location for avg miles for ea,actual number of records
-void AvgMiles(const int MiRun[][NUM_DAYS], int TotMile[], double AvgMile [], int numRecord);
+void AvgMiles(const int MiRun[][NUM_DAYS], int TotMile[], double AvgMileD [], double AvgMileR[], int numRecord);
 
 //Precondition -  receives names of runners, two dimensiional array, output of total and avg miles, and amout of records
 //Postconditon- output results displaying the runner, miles run, total and avg miles in proper format for each runner.
-void outputResults(string Runer[], const int MiRn[][NUM_DAYS], int TMile[], double Amile[], int numRec);
+void outputResults(string Runer[], const int MiRn[][NUM_DAYS], int TMile[], double AmileD[], double AmileR[], int numRec);
 
 
 int main()
@@ -47,14 +47,15 @@ int main()
     string Runners[MAX_Runners];
     int MilesRun[MAX_Runners][NUM_DAYS];
     int Totalmiles[MAX_Runners];
-    double Averagemiles[MAX_Runners];
+    double AveragemilesD[MAX_Runners];
+    double AveragemilesR[NUM_DAYS];
 
     int numRecords;//keep track of the number of records read
 
 
     numRecords = getData(Runners,MilesRun, MAX_Runners);
 
-    cout << " " << endl; 
+    /*cout << " " << endl;  // used as a checkpoint
     cout << "numRecords = " << numRecords << endl;
 
     for (int i = 0; i < numRecords; i++)
@@ -64,9 +65,9 @@ int main()
             cout << MilesRun[i][j] << " ";
 
         cout << endl;
-    }
-    AvgMiles(MilesRun,Totalmiles, Averagemiles, numRecords);
-    outputResults(Runners, MilesRun, Totalmiles, Averagemiles, numRecords);
+    }*/
+    AvgMiles(MilesRun,Totalmiles, AveragemilesD, AveragemilesR, numRecords);
+    outputResults(Runners, MilesRun, Totalmiles, AveragemilesD, AveragemilesR, numRecords);
 
 
     return 0;
@@ -89,16 +90,16 @@ int getData(string Runers[], int MileRun[][NUM_DAYS], int MAX_Runners)
 
     while (!inFile.eof() && !(row >= MAX_Runners))
     {
-        cout << row << " " << Runers[row] << " " << endl;
+        //cout << row << " " << Runers[row] << " " << endl; check point
 
         for (int i = 0; i < NUM_DAYS; i++)
         {
             inFile >> MileRun[row][i];
-            cout << MileRun[row][i] << " ";
+            //cout << MileRun[row][i] << " ";
         }
-        cout << endl;
+        //cout << endl;
         row++;
-        cout << "row = " << row << " " << endl;
+       // cout << "row = " << row << " " << endl;
         inFile >> Runers[row];//which means row +1 because starts at 0
 
     }
@@ -106,7 +107,7 @@ int getData(string Runers[], int MileRun[][NUM_DAYS], int MAX_Runners)
     return row;
 }
 
-void AvgMiles(const int MiRun[][NUM_DAYS], int TotMile[], double AvgMile[], int numRecord) // int total[], double avg[])
+void AvgMiles(const int MiRun[][NUM_DAYS], int TotMile[], double AvgMileD[], double AvgMileR[], int numRecord) // int total[], double avg[])
 {
 
     double sum;
@@ -119,19 +120,30 @@ void AvgMiles(const int MiRun[][NUM_DAYS], int TotMile[], double AvgMile[], int 
         {
             sum += MiRun[i][j];
         }
-        TotMile[i] = sum; //( int total = sum; average = sum/7)
+        TotMile[i] = sum; //( int total = sum)
 
-        AvgMile[i] = sum / (NUM_DAYS);
+        AvgMileR[i] = sum / (NUM_DAYS); //per runner
+    }
+
+    for (int j = 0; j < NUM_DAYS; j++)
+    {
+        sum = 0;
+        for (int i = 0; i < numRecord; i++)
+        {
+            sum += MiRun[i][j];
+        }
+        AvgMileD[j] = sum / (numRecord); //(  average = per day
+
 
 
     }
 }
 
-void outputResults(string Runer[], const int MiRn[][NUM_DAYS], int TMile[], double Amile[], int numRec) // const int total[], const double average[]) 
+void outputResults(string Runer[], const int MiRn[][NUM_DAYS], int TMile[], double AmileD[], double AmileR[], int numRec) // const int total[], const double average[]) 
 {
     cout << endl;
     cout << endl;
-    cout << setw(14) << "Name" << setw(6) << "Mon" << setw(6) << "Tue" << setw(6) << "Wed" << setw(6) << "Thu" << setw(6) << "Fri" << setw(6) << "Sat" << setw(6) << "Sun" << setw(8) << "Total" << setw(8) << "Avg" << endl;
+    cout << setw(14) << "Name" << setw(8) << "Mon" << setw(8) << "Tue" << setw(8) << "Wed" << setw(8) << "Thu" << setw(8) << "Fri" << setw(8) << "Sat" << setw(8) << "Sun" << setw(10) << "Total" << setw(10) << "Avg/Run" << endl;
 
     for (int i = 0; i < numRec; i++)
     {
@@ -139,10 +151,20 @@ void outputResults(string Runer[], const int MiRn[][NUM_DAYS], int TMile[], doub
         
         for (int j = 0; j < NUM_DAYS; j++)
         {
-            cout << setw(6) << MiRn[i][j];
+            cout << setw(8) << MiRn[i][j];
         }
 
-        cout << setw(8) << TMile[i];
-        cout << setw(8) << fixed << setprecision(2) << Amile[i] << endl;
+        cout << setw(10) << TMile[i];
+        cout << setw(10) << fixed << setprecision(2) << AmileR[i] << endl;
     }
+    cout << setw(14) << "Avg Mi/day" << setw(6);
+
+   
+   /// cout << setw(8) << fixed << setprecision(2) << Amile[i] << endl;
+   
+   for (int i = 0; i < NUM_DAYS; i++)
+    {
+        cout << setw(8) << fixed << setprecision(2) << AmileD[i];   
+    }
+   cout << endl;
 }

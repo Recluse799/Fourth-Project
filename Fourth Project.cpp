@@ -1,17 +1,22 @@
-// Fourth Project.cpp : This file contains the 'main' function. Program execution begins and ends there. two branches, one parallel
-// one structs
-//
-// 
-/*  Immanuel Braxton
-//  5//7/24
-// Arrays and Structs Project I.cpp : This file contains the 'main' function. Program execution begins and ends there. Parallel 
-version.
-// Function prototypes
-////void calculateTotalsAndAverage(const string runners[], const double mil[][NUM_DAYS], int numRunners, int total[], double average[]);
-//void outputResults(const string runners[], const int miles[][NUM_DAYS], int numRunners, const int total[], const double average[]);
-//// Function prototypes
-//Precondition - expects reference to names array and run time for each day, all are empty, has maxium capactiy of rows)
-//Post conditon- return actual number of files, and store the data in the arrays in memory);;
+/*
+  Fourth Project.cpp : This file contains the 'main' function.Program execution begins and ends there.two branches, one parallel
+  one structs
+
+
+  Immanuel Braxton
+  5//7/24
+  Arrays and Structs Project I.cpp : This file contains the 'main' function. Program execution begins and ends there. Parallel 
+  version.
+  Function prototypes
+  void calculateTotalsAndAverage(const string runners[], const double mil[][NUM_DAYS], int numRunners, int total[], double average[]);
+  void outputResults(const string runners[], const int miles[][NUM_DAYS], int numRunners, const int total[], const double average[]);
+  Function prototypes
+  Precondition - expects reference to names array and run time for each day, all are empty, has maxium capactiy of rows)
+  Post conditon- return actual number of files, and store the data in the arrays in memory);;
+
+  Description: This program uses Structs to store and calculate runners distance sum ran in miles for each day per runner for the week,
+  and then takes the average. The program also calculates the total amount of miles ran each day for all runners, and the average.
+  Then It will show the miles and average miles ran in the corresponding day or week, to the user.
 
 */
 
